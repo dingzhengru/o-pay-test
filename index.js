@@ -12,13 +12,11 @@ const crypto = require("crypto")
 const tradeidBytes = 10  // 長度為 Bytes * 2
 const tradeid = crypto.randomBytes(tradeidBytes).toString("hex")
 
-console.log(tradeid)
 
 // 發票參數
 const invoiceidBytes = 15  // 長度為 Bytes * 2
 const invoiceid = crypto.randomBytes(invoiceidBytes).toString("hex")
 
-console.log(invoiceid)
 
 
 // *基本參數
@@ -70,7 +68,7 @@ console.log(invoiceid)
 let tradeInfo = {
     MerchantTradeNo: tradeid,
     MerchantTradeDate: '2020/01/07 17:11:05',
-    TotalAmount: '100',
+    TotalAmount: '1200',
     TradeDesc: '交易描述123',
     ItemName: 'p1',
     ReturnURL: 'http://localhost',
@@ -113,7 +111,58 @@ let invoiceInfo = {
 let create = new opay();
 
 // 回傳 html
-let htm = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
+// let aio_check_out_credit_onetime = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
 
-console.log(htm)
 
+
+const express = require('express');
+const app = express();
+
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.json()) // for parsing application/json
+app.use(express.static('./'))
+
+
+// app.get('/opay/aio_check_out_credit_onetime', function (req, res) {
+//     res.send(aio_check_out_credit_onetime);
+// });
+
+app.post('/opay', function (req, res) {
+    const type = req.body['opay-type'];
+    console.log(type)
+
+    let htm = '404'
+
+    if(type == 'aio_check_out_credit_onetime') {
+        htm = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
+        res.send(htm);
+    } else if(type == 'aio_check_out_credit_divide') {
+        // 注意: 分期期數及分期總金額請不要直接從 client 端 POST，以免被修改。
+        htm = create.payment_client.aio_check_out_credit_divide(
+            tradeInfo,
+            invoiceInfo,
+            12,
+            1200)
+        res.send(htm);
+    } else if(type == 'aio_check_out_cvs') {
+        let cvsInfo = {
+            'Desc_1': 'Desc_1',
+            'Desc_2': 'Desc_2',
+            'Desc_3': 'Desc_3',
+            'Desc_4': 'Desc_4',
+            'PaymentInfoURL': 'http://localhost',
+            'StoreExpireDate': '1440',
+        }
+        htm = create.payment_client.aio_check_out_cvs(
+            tradeInfo,
+            {},
+            cvsInfo)
+        res.send(htm);
+    } else {
+        res.send(htm);
+    }
+});
+
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+});

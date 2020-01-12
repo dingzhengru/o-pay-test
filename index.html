@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>歐付寶測試</title>
+</head>
+<body>
+    <div id="app">
+        <h1>歐付寶測試</h1>
+        <form action="/opay" method="post">
+            <p>
+                <input 
+                type="radio" 
+                name="opay-type"
+                value="aio_check_out_credit_onetime"> 
+                信用卡單筆付款(aio_check_out_credit_onetime)
+            </p>
+            <!-- <p>
+                <input 
+                type="radio" 
+                name="opay-type"
+                value="aio_check_out_credit_divide"> 
+                信用卡分期付款(aio_check_out_credit_divide)
+            </p>
+            <p>
+                <input 
+                type="radio" 
+                name="opay-type"
+                value="aio_check_out_cvs"> 
+                超商付款(aio_check_out_cvs)
+            </p> -->
+            <div>
+                <button type="submit">付款頁面</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+
+    <script src="./main.js"></script>
+</body>
+</html>
