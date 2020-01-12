@@ -44,9 +44,9 @@ htm = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
     *  Remark
     *  HoldTradeAMT
     *  UseRedeem
-    *  StoreID  
-範例
+    *  StoreID
 ``` js
+// example
 let tradeInfo = {
     MerchantTradeNo: tradeid,
     MerchantTradeDate: '2020/01/07 17:11:05',
@@ -83,6 +83,7 @@ let tradeInfo = {
 *  InvType: 一般稅額: 07 特種稅額: 08
 
 ``` js
+// example
 let invoiceInfo = {
     RelateNumber: invoiceid,
     CustomerID: null,
