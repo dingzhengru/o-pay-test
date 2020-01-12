@@ -44,7 +44,7 @@ htm = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
     *  Remark
     *  HoldTradeAMT
     *  UseRedeem
-    *  StoreID
+    *  StoreID  
 範例
 ``` js
 let tradeInfo = {
@@ -56,7 +56,9 @@ let tradeInfo = {
     ReturnURL: 'http://localhost',
 }
 ```
+
 ## aio_check_out_XXXX method 發票參數
+
 *  RelateNumber: 發票關聯號碼，請用 30 碼 UID
 *  CustomerID: 客戶代號
 *  CustomerIdentifier: 固定 8 位長度數字
@@ -77,8 +79,9 @@ let tradeInfo = {
 *  InvoiceItemPrice: 商品價格，若有兩項以上商品時請用管線符號”|”分隔。
 *  InvoiceItemTaxType: 商品課稅類別，若有兩項以上商品時請用管線符號”|”分隔。
 *  InvoiceRemark: 商品備註，若有兩項以上商品時請用管線符號”|”分隔。
-*  DelayDay: 發票開立延遲天數。本參數值請帶 0~15(天)，當天數為 0 時，則付款完成後立即開立發票。
+*  DelayDay: 發票開立延遲天數。本參數值請帶 0-15(天)，當天數為 0 時，則付款完成後立即開立發票。
 *  InvType: 一般稅額: 07 特種稅額: 08
+
 ``` js
 let invoiceInfo = {
     RelateNumber: invoiceid,
