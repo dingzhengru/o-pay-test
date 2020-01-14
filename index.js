@@ -42,7 +42,7 @@ const invoiceid = crypto.randomBytes(invoiceidBytes).toString("hex")
 
 // *發票參數
 // 必要欄位
-//     RelateNumber: 
+//     RelateNumber: 發票關聯號碼，請用 30 碼 UID
 //     CustomerID: 
 //     CustomerIdentifier: 
 //     CustomerName: 
@@ -71,7 +71,7 @@ let tradeInfo = {
     TotalAmount: '1200',
     TradeDesc: '交易描述123',
     ItemName: 'p1',
-    ReturnURL: 'http://localhost',
+    ReturnURL: 'http://114.41.117.113:55555',
     // ChooseSubPayment: '',
     // OrderResultURL: '',
     // NeedExtraPaidInfo: '',
@@ -108,34 +108,44 @@ let invoiceInfo = {
     InvType: '07',
 }
 
-let create = new opay();
+let create = new opay()
 
 // 回傳 html
 // let aio_check_out_credit_onetime = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
 
 
 
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
+const cors = require('cors')
 
+app.use(cors()); //允許跨站
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(express.json()) // for parsing application/json
 app.use(express.static('./'))
 
 
-// app.get('/opay/aio_check_out_credit_onetime', function (req, res) {
-//     res.send(aio_check_out_credit_onetime);
-// });
+// app.get('/', function (req, res) {
+//     res.send('123')
+// })
 
 app.post('/opay', function (req, res) {
-    const type = req.body['opay-type'];
+    const type = req.body['opay-type']
     console.log(type)
+
+    let tid = crypto.randomBytes(10).toString("hex")
+    let nid = crypto.randomBytes(15).toString("hex")
+
+    tradeInfo.MerchantTradeNo = tid
+    invoiceInfo.RelateNumber = nid
 
     let htm = '404'
 
     if(type == 'aio_check_out_credit_onetime') {
-        htm = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
-        res.send(htm);
+        htm = create.payment_client.aio_check_out_credit_onetime(
+                tradeInfo,
+                invoiceInfo)
+        res.send(htm)
     } else if(type == 'aio_check_out_credit_divide') {
         // 注意: 分期期數及分期總金額請不要直接從 client 端 POST，以免被修改。
         htm = create.payment_client.aio_check_out_credit_divide(
@@ -143,7 +153,7 @@ app.post('/opay', function (req, res) {
             invoiceInfo,
             12,
             1200)
-        res.send(htm);
+        res.send(htm)
     } else if(type == 'aio_check_out_cvs') {
         let cvsInfo = {
             'Desc_1': 'Desc_1',
@@ -157,12 +167,25 @@ app.post('/opay', function (req, res) {
             tradeInfo,
             {},
             cvsInfo)
-        res.send(htm);
+        res.send(htm)
     } else {
-        res.send(htm);
+        res.send(htm)
     }
-});
+})
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
+app.post('/', function (req, res) {
+    console.log('/paid:', req.body)
+})
+
+app.post('/opay/paid', function (req, res) {
+    console.log('paid:', req.body)
+    res.send('paid success')
+})
+
+app.get('/opay/paid', function (req, res) {
+    res.send('paid success')
+})
+
+app.listen(55555, function () {
+    console.log('listening on port 55555')
+})
