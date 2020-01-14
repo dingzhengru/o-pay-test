@@ -1,6 +1,8 @@
 const opay = require('opay_payment_nodejs')
 const crypto = require("crypto")
 
+const create = new opay()
+
 // 信用卡測試卡號: 4311-9522-2222-2222
 // 信用卡測試安全碼: 222
 
@@ -71,7 +73,7 @@ let tradeInfo = {
     TotalAmount: '1200',
     TradeDesc: '交易描述123',
     ItemName: 'p1',
-    ReturnURL: 'http://114.41.117.113:55555',
+    ReturnURL: 'http://dingzhengru.opay-test.nctu.me/opay/paid',
     // ChooseSubPayment: '',
     // OrderResultURL: '',
     // NeedExtraPaidInfo: '',
@@ -108,7 +110,7 @@ let invoiceInfo = {
     InvType: '07',
 }
 
-let create = new opay()
+
 
 // 回傳 html
 // let aio_check_out_credit_onetime = create.payment_client.aio_check_out_credit_onetime(tradeInfo)
@@ -132,12 +134,6 @@ app.use(express.static('./'))
 app.post('/opay', function (req, res) {
     const type = req.body['opay-type']
     console.log(type)
-
-    let tid = crypto.randomBytes(10).toString("hex")
-    let nid = crypto.randomBytes(15).toString("hex")
-
-    tradeInfo.MerchantTradeNo = tid
-    invoiceInfo.RelateNumber = nid
 
     let htm = '404'
 
@@ -173,10 +169,6 @@ app.post('/opay', function (req, res) {
     }
 })
 
-app.post('/', function (req, res) {
-    console.log('/paid:', req.body)
-})
-
 app.post('/opay/paid', function (req, res) {
     console.log('paid:', req.body)
     res.send('paid success')
@@ -186,6 +178,6 @@ app.get('/opay/paid', function (req, res) {
     res.send('paid success')
 })
 
-app.listen(55555, function () {
-    console.log('listening on port 55555')
+app.listen(80, function () {
+    console.log('listening on port 80')
 })

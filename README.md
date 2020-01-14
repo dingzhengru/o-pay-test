@@ -1,6 +1,11 @@
 #  歐付寶測試
 
-*  參照此說明: https://github.com/o-pay/Payment_Node.js/blob/master/Doc/Nodejs_OPay_Payment_SDK.pdf
+*  參照此說明: https://developers.opay.tw/Prepare/Intro
+*  nodejs SDK: https://github.com/o-pay/Payment_Node.js
+*  nodejs SDK pdf: https://github.com/o-pay/Payment_Node.js/blob/master/Doc/Nodejs_OPay_Payment_SDK.pdf
+
+## 注意事項
+*  ReturnURL 只接受 port 80 的網址，且要是能對外連線的，localhost 會收不到
 
 ## 安裝 SDK
 將 SDK 中整個 opay_payment_nodejs 資料夾放入 node_modules 路徑裡面  
